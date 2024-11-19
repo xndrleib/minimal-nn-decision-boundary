@@ -36,7 +36,7 @@ This project aims to:
 
 - **Hidden Layer**:
   - **Number of Neurons**: Each neuron represents a linear boundary (a line in 2D space). Therefore, the number of neurons in the hidden layer should at least equal the number of linear boundaries required to separate the classes.
-  - **Activation Function**: A non-linear activation function like **ReLU** (Rectified Linear Unit) is used to introduce non-linearity, enabling the modeling of complex decision boundaries.
+  - **Activation Function**: A non-linear activation function like **Leaky ReLU** (Leaky Rectified Linear Unit) is used to introduce non-linearity, enabling the modeling of complex decision boundaries.
 
 - **Output Layer**:
   - **Neurons**: 1 neuron with a **sigmoid** activation function (suitable for binary classification) to output the class probabilities.
