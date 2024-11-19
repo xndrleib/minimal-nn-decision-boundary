@@ -56,8 +56,8 @@ class MinimalNN(nn.Module):
         """
         super(MinimalNN, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size)
-        self.relu = nn.ReLU()
-        self.dropout = nn.Dropout(p=0.2)
+        self.bn1 = nn.BatchNorm1d(hidden_size)
+        self.leaky_relu = nn.LeakyReLU(negative_slope=0.01)
         self.fc2 = nn.Linear(hidden_size, 1)
         self.sigmoid = nn.Sigmoid()
 
@@ -72,8 +72,8 @@ class MinimalNN(nn.Module):
         - out: Output tensor after passing through the network.
         """
         out = self.fc1(x)
-        out = self.relu(out)
-        # out = self.dropout(out)
+        out = self.bn1(out)
+        out = self.leaky_relu(out)
         out = self.fc2(out)
         out = self.sigmoid(out)
         return out
@@ -363,7 +363,7 @@ def main():
     criterion = nn.BCELoss()
     optimizer = optim.Adam(model.parameters(), lr=0.1, weight_decay=1e-4)
     model, losses = train_model(
-        model, criterion, optimizer, dataloader, num_epochs=100
+        model, criterion, optimizer, dataloader, num_epochs=200
     )
 
     # Step 5: Visualize the result and return metrics
