@@ -303,28 +303,58 @@ def main():
 
     def initialize_weights(m):
         """
-        Initialize weights to ensure diverse decision boundaries covering
-        all possible slopes and intercepts.
+        Initialize weights so that each line passes through a random point on
+        the perimeter of the unit square with a random orientation.
         """
         if isinstance(m, nn.Linear):
             num_neurons = m.weight.size(0)
             input_dim = m.weight.size(1)
 
-            # Only apply to the first layer with 2D inputs
             if input_dim == 2:
-                # w1*x1 + w2*x2 + b = 0
+                # Sample theta uniformly from [0, 2*pi)
+                theta = torch.rand(num_neurons) * 2 * np.pi
 
-                # Sample theta uniformly from [0, pi)
-                theta = torch.rand(num_neurons) * np.pi
-                w1 = torch.cos(theta)
-                w2 = torch.sin(theta)
+                # Compute weights: w1 = sin(theta), w2 = cos(theta)
+                w1 = torch.sin(theta)
+                w2 = torch.cos(theta)
                 m.weight.data = torch.stack((w1, w2), dim=1)
 
-                m.bias.data = -torch.rand(num_neurons) * w2
+                # Sample a point (x0, y0) uniformly from the perimeter of the square [0,1]x[0,1]
+                perimeter = 4.0  # Total perimeter length
+                p = torch.rand(num_neurons) * perimeter
+
+                x0 = torch.zeros(num_neurons)
+                y0 = torch.zeros(num_neurons)
+
+                for i in range(num_neurons):
+                    pi = p[i].item()
+                    if pi < 1.0:
+                        # Bottom edge: x from 0 to 1, y = 0
+                        x0[i] = pi
+                        y0[i] = 0.0
+                    elif pi < 2.0:
+                        # Right edge: x = 1, y from 0 to 1
+                        x0[i] = 1.0
+                        y0[i] = pi - 1.0
+                    elif pi < 3.0:
+                        # Top edge: x from 1 to 0, y = 1
+                        x0[i] = 3.0 - pi
+                        y0[i] = 1.0
+                    else:
+                        # Left edge: x = 0, y from 1 to 0
+                        x0[i] = 0.0
+                        y0[i] = 4.0 - pi
+
+                # Compute bias: b' = - (w1 * x0 + w2 * y0)
+                b_prime = - (w1 * x0 + w2 * y0)
+
+                # Set the bias
+                m.bias.data = b_prime
             else:
                 # For other layers, initialize normally
-                nn.init.normal_(m.weight, mean=0.0, std=0.1)
+                nn.init.xavier_uniform_(m.weight)
                 nn.init.constant_(m.bias, 0.0)
+
 
     model.apply(initialize_weights)
     visualize_initialized_lines(model)
