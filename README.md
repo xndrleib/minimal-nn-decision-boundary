@@ -67,9 +67,7 @@ To ensure a uniform distribution of all lines over the angle of inclination $\th
 
 4. **Use the line equation with the obtained parameters:**
 
-   $$
-   \sin(\theta) \cdot x + \cos(\theta) \cdot y + b' = 0
-   $$
+   $$\sin(\theta) \cdot x + \cos(\theta) \cdot y + b' = 0$$
 
 **Note:**
 
