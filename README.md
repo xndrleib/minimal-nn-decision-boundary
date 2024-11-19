@@ -47,6 +47,34 @@ This project aims to:
 - **Hidden Neurons**: Each hidden neuron corresponds to one linear boundary. Therefore, the minimal number of hidden neurons equals the minimal number of linear boundaries required.
 - **Conclusion for General Solution**: The minimal architecture is a **2-input, *k*-hidden neurons, and 1-output neural network**, where *k* is the minimal number of linear boundaries needed to separate the classes.
 
+### Initialization of Weights
+
+To ensure a uniform distribution of all lines over the angle of inclination $\theta$ and offset $b$ in the range $[0, 1]$, regardless of $\theta$, we follow these steps:
+
+1. **Generate $\theta$ uniformly in the range $[0, \pi)$:**
+
+   This ensures uniform coverage of all possible directions of the lines.
+
+2. **Generate $b$ uniformly in the range $[0, 1]$:**
+
+   This guarantees that the offset $b$ is uniformly distributed, independent of the angle $\theta$.
+
+3. **Compute adjusted bias $b'$ considering $\theta$:**
+
+   Using the relationship $b = \dfrac{b'}{\cos(\theta)}$, we find $b'$:
+
+   $$b' = b \cos(\theta)$$
+
+4. **Use the line equation with the obtained parameters:**
+
+   $$
+   \sin(\theta) \cdot x + \cos(\theta) \cdot y + b' = 0
+   $$
+
+**Note:**
+
+- When $\cos(\theta) = 0$ (i.e., when $\theta = \dfrac{\pi}{2} + \pi n$, where $n$ is an integer), the value of $b'$ will be zero, and the line equation simplifies to $\sin(\theta) \cdot x = 0$, which corresponds to a vertical line. However, such values of $\theta$ are rare and do not significantly affect the overall uniformity of the distribution.
+
 ## Installation
 
 ### Dependencies
