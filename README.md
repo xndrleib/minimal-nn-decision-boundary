@@ -64,13 +64,13 @@ To ensure that the initial decision boundaries (lines) are uniformly distributed
 
    This defines the orientation of the line.
 
-1. **Compute the bias $b'$:**
+4. **Compute the bias $b'$:**
 
   $$b' = - (w_1 x_0 + w_2 y_0)$$
 
    This ensures that the line passes through the point $(x_0, y_0)$.
 
-1. **Use the line equation with the obtained parameters:**
+5. **Use the line equation with the obtained parameters:**
 
   $$w_1 x + w_2 y + b' = 0$$
 
