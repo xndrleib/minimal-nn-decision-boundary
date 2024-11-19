@@ -49,29 +49,35 @@ This project aims to:
 
 ### Initialization of Weights
 
-To ensure a uniform distribution of all lines over the angle of inclination $\theta$ and offset $b$ in the range $[0, 1]$, regardless of $\theta$, we follow these steps:
+To ensure that the initial decision boundaries (lines) are uniformly distributed within the unit square, we initialize the weights of the neural network as follows:
 
-1. **Generate $\theta$ uniformly in the range $[0, \pi)$:**
+1. **Generate $\theta$ uniformly in the range $[0, 2\pi)$:**
 
-   This ensures uniform coverage of all possible directions of the lines.
+   This ensures uniform coverage of all possible orientations of the lines.
 
-2. **Generate $b$ uniformly in the range $[0, 1]$:**
+2. **Sample a point $(x_{0}, y_{0})$ uniformly from the perimeter of the unit square $[0, 1] \times [0, 1]$:**
 
-   This guarantees that the offset $b$ is uniformly distributed, independent of the angle $\theta$.
+   This ensures that the lines pass through points uniformly distributed along the boundary of the unit square.
 
-3. **Compute adjusted bias $b'$ considering $\theta$:**
+3. **Compute weights $w_1$ and $w_2$:**
+  $$w_1 = \sin(\theta), \quad w_2 = \cos(\theta)$$
 
-   Using the relationship $b = \dfrac{b'}{\cos(\theta)}$, we find $b'$:
+   This defines the orientation of the line.
 
-   $$b' = b \cos(\theta)$$
+1. **Compute the bias $b'$:**
 
-4. **Use the line equation with the obtained parameters:**
+  $$b' = - (w_1 x_0 + w_2 y_0)$$
 
-   $$\sin(\theta) \cdot x + \cos(\theta) \cdot y + b' = 0$$
+   This ensures that the line passes through the point $(x_0, y_0)$.
+
+1. **Use the line equation with the obtained parameters:**
+
+  $$w_1 x + w_2 y + b' = 0$$
 
 **Note:**
 
-- When $\cos(\theta) = 0$ (i.e., when $\theta = \dfrac{\pi}{2} + \pi n$, where $n$ is an integer), the value of $b'$ will be zero, and the line equation simplifies to $\sin(\theta) \cdot x = 0$, which corresponds to a vertical line. However, such values of $\theta$ are rare and do not significantly affect the overall uniformity of the distribution.
+- This method ensures that all lines lie within the unit square and are uniformly distributed in both position and orientation.
+- By initializing the weights and biases in this manner, the network starts with a diverse set of decision boundaries, improving its ability to learn the correct boundaries during training.
 
 ## Installation
 
